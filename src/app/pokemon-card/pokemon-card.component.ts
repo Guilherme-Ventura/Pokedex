@@ -1,4 +1,7 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Type } from '@angular/core';
+import { firstValueFrom } from 'rxjs';
+import { Pokemon } from '../interfaces/pokemon';
+import { PokemonService } from '../services/pokemon.service';
 
 @Component({
   selector: 'app-pokemon-card',
@@ -7,12 +10,29 @@ import { Component, Input } from '@angular/core';
 })
 export class PokemonCardComponent {
   @Input()
-  pokemon: string = '';
+  pokemon: Pokemon = {
+    name: "",
+    url: "",
+    type: ""
+  };
 
   @Input()
   numero!: number;
+  linkImage: string = "";
 
-  pegarImagemPokemon(){
+  constructor(public pokemonService: PokemonService){
+    //this.ColetaInfoPokemon();
+    this.linkImage =  this.pegarImagemPokemons();
+  }
+  async ColetaInfoPokemon(){
+    let result = await (await firstValueFrom(await this.pokemonService.carregarInfoPokemon(this.numero)));
+    console.log(result);
+  }
+
+  pegarImagemPokemons(){
+    console.log("EXECUTANDO IMAGEM");
+    console.log(this.numero);
+
     const numeroFormatado = this.leadingZero(this.numero);
 
     return `https://assets.pokemon.com/assets/cms2/img/pokedex/detail/${numeroFormatado}.png`

@@ -16,9 +16,6 @@ export class PokemonListComponent {
   }
   async coletapokemon(){
     this.pokemons = (await firstValueFrom(await this.pokemonService.carregarPokemons())).results;
-    console.log(this.pokemons); 
-    console.log(this.pokemons[0].name);
-    console.log(this.pokemons[0].url);
   }
   
 }
